@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import dj_database_url
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,11 +27,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'pt&y3and$#g9*b2n&ucog_q#n16bm$@gt54s21kuyr#!2mva*0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 # For future reference
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'ec2-52-36-87-67.us-west-2.compute.amazonaws.com']
 # ALLOWED_HOSTS = ['localhost', 'ec2-52-37-133-225.us-west-2.compute.amazonaws.com']
 
 
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'portfolio_app',
     'rest_framework',
     'portfolio_api',
+
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -89,21 +92,30 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-# 'default':dj_database_url.config(
-#     default=os.environ.get('PORTFOLIO_DATABASE_URL'))
-# }
-
 DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'))
+}
+
+
+CACHES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'portfolio',
-        'USER': os.environ.get('USER', 'MunirIbrahim'),
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'image_cache_table',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'portfolio',
+#         'USER': os.environ.get('USER', 'MunirIbrahim'),
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
